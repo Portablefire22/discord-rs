@@ -5,9 +5,7 @@ use std::{
     str::FromStr,
 };
 
-use crate::api::discord::{channels, messages, users};
-
-use super::{guilds, post_message};
+use crate::types::{channels, guilds, messages, post_message, users};
 
 pub struct MessageHandler {
     authorization_token: String,
