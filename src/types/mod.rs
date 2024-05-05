@@ -1,0 +1,14 @@
+pub mod applications;
+pub mod attachments;
+pub mod channels;
+pub mod embeds;
+pub mod emojis;
+pub mod guilds;
+pub mod login;
+pub mod messages;
+pub mod post_message;
+pub mod reactions;
+pub mod roles;
+pub mod stickers;
+pub mod threads;
+pub mod users;
