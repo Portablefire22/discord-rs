@@ -1,9 +1,6 @@
 use log::error;
 use reqwest::{header, Client};
-use std::{
-    io::{self, Write},
-    str::FromStr,
-};
+use std::io::{self, Write};
 
 use crate::types::{channels, guilds, messages, post_message, users};
 

@@ -10,7 +10,7 @@ pub struct Details {
 }
 
 impl Details {
-    fn new(login: String, password: String, undelete: bool) -> Self {
+    pub fn new(login: String, password: String, undelete: bool) -> Self {
         Self {
             login,
             password,
