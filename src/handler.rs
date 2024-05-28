@@ -1,8 +1,15 @@
 use log::error;
-use reqwest::{header, Client};
-use std::io::{self, Write};
+use reqwest::{header, Client, Error};
+use std::{
+    borrow::Borrow,
+    io::{self, Write},
+};
 
-use crate::types::{channels, guilds, messages, post_message, users};
+use crate::types::{
+    channels::{self, Channel},
+    guilds::{self, Guild},
+    messages, post_message, users,
+};
 
 pub struct MessageHandler {
     authorization_token: String,
@@ -41,51 +48,77 @@ impl MessageHandler {
             client,
         }
     }
-    pub async fn get_current_user_guilds(&self) -> Vec<guilds::Guild> {
+    pub async fn get_current_user_guilds(&self) -> Result<Vec<guilds::Guild>, Error> {
         let url = format!("https://discord.com/api/v9/users/@me/guilds");
         let res = self.client.get(url).build();
         match res {
-            Ok(request) => self
-                .client
-                .execute(request)
-                .await
-                .unwrap()
-                .json::<Vec<guilds::Guild>>()
-                .await
-                .unwrap(),
+            Ok(request) => {
+                self.client
+                    .execute(request)
+                    .await
+                    .unwrap()
+                    .json::<Vec<guilds::Guild>>()
+                    .await
+            }
             Err(request) => {
                 error!("Error sending request!");
                 error!("{}", request);
-                panic!("Could not get current user's Guilds!");
+                Err(request)
             }
         }
     }
 
-    pub async fn get_guild_channels(&self, guild_id: String) -> Vec<channels::Channel> {
+    pub async fn get_guild_channels(
+        &self,
+        guild_id: String,
+    ) -> Result<Vec<channels::Channel>, Error> {
         let url = format!("https://discord.com/api/v9/guilds/{}/channels", guild_id);
         let res = self.client.get(url).build();
         match res {
-            Ok(request) => self
-                .client
-                .execute(request)
-                .await
-                .unwrap()
-                .json::<Vec<channels::Channel>>()
-                .await
-                .unwrap(),
+            Ok(request) => {
+                println!(
+                    "Get Guild Channels: {}",
+                    self.client
+                        .execute(request.try_clone().unwrap())
+                        .await
+                        .unwrap()
+                        //.json::<Vec<guilds::Guild>>()
+                        .text()
+                        .await
+                        .unwrap()
+                );
+                self.client
+                    .execute(request)
+                    .await
+                    .unwrap()
+                    .json::<Vec<channels::Channel>>()
+                    .await
+            }
             Err(request) => {
                 error!("Error sending request!");
                 error!("{}", request);
-                panic!("Could not get guild '{}' channels", guild_id)
+                Err(request)
             }
         }
     }
 
     pub async fn display_current_user_guilds(&self) {
-        let guilds = self.get_current_user_guilds().await;
+        let guilds: Vec<Guild> = vec![];
+        match self.get_current_user_guilds().await {
+            Ok(guilds) => guilds,
+            Err(e) => {
+                panic!("{}", e);
+            }
+        };
         for guild in guilds {
             println!("{} | {}", &guild.name, &guild.id);
-            let channels = self.get_guild_channels(guild.id).await;
+            let channels: Vec<Channel> = vec![];
+            match self.get_guild_channels(guild.id).await {
+                Ok(channels) => channels,
+                Err(e) => {
+                    panic!("{}", e);
+                }
+            };
             for chan in channels {
                 println!(
                     "   {} | {} | {}",
@@ -97,7 +130,11 @@ impl MessageHandler {
         }
     }
 
-    pub async fn send_message(&self, msg: &post_message::Message, channel_id: String) {
+    pub async fn send_message(
+        &self,
+        msg: &post_message::Message,
+        channel_id: String,
+    ) -> Result<(), reqwest::Error> {
         let body = serde_json::to_string(msg);
         let url = format!(
             "https://discord.com/api/v9/channels/{}/messages",
@@ -109,16 +146,19 @@ impl MessageHandler {
                 match res {
                     Ok(request) => {
                         println!("{:?}", self.client.execute(request).await.unwrap().status());
+                        Ok(())
                     }
                     Err(request) => {
                         error!("Error sending request!");
                         error!("{}", request);
+                        Err(request)
                     }
                 }
             }
-            _ => {
+            Err(e) => {
                 error!("Error parsing given message to json!");
                 error!("{:?}", &msg);
+                panic!("{}", e);
             }
         }
     }
@@ -137,7 +177,7 @@ impl MessageHandler {
             content: Some(content),
             ..Default::default()
         };
-        self.send_message(&msg, id).await;
+        let _ = self.send_message(&msg, id).await;
     }
 
     pub async fn dbg_get_messages(&self) {

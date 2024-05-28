@@ -10,3 +10,7 @@ serde_repr = "0.1.19"
 reqwest = { version = "0.12", features = ["json", "gzip", "brotli"] }
 rpassword = "7.3"
 log = "0.4"
+
+[dev-dependencies]
+tokio = {version = "1.37", features = ["macros"]}
+

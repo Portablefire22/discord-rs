@@ -7,7 +7,7 @@ use super::{threads, users};
 pub struct Channel {
     pub id: String,
     #[serde(rename = "type")]
-    pub channel_type: ChannelType,
+    pub channel_type: usize,
     pub guild_id: Option<String>,
     pub position: Option<usize>,
     pub permission_overwrites: Option<Vec<Overwrite>>,
