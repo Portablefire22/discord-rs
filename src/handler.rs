@@ -11,6 +11,7 @@ use crate::types::{
     messages, post_message, users,
 };
 
+#[derive(Debug, Clone, Default)]
 pub struct MessageHandler {
     authorization_token: String,
     client: reqwest::Client,
@@ -302,3 +303,4 @@ impl MessageHandler {
         }
     }
 }
+
