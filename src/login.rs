@@ -55,7 +55,8 @@ impl LoginHandler {
                 debug!("RES: {:?}", res);
                 match res {
                     Ok(request) => {
-                        debug!("{:?}", request.body().unwrap());
+                        let b = request.body().unwrap();
+                        debug!("{:?}", b.as_bytes());
                         login_response = self
                             .client
                             .execute(request)
