@@ -51,16 +51,6 @@ impl LoginHandler {
                 let res = self.client.post(url).body(b).build();
                 match res {
                     Ok(request) => {
-                        let x = self
-                            .client
-                            .execute(request)
-                            .await
-                            .unwrap()
-                            .text()
-                            .await
-                            .unwrap();
-                        debug!("{:?}", x);
-                        panic!("");
                         login_response = self
                             .client
                             .execute(request)
