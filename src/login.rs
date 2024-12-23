@@ -1,4 +1,4 @@
-use log::error;
+use log::{debug, error};
 use reqwest::{header, Client};
 use rpassword::prompt_password;
 use std::io::{self, prelude::*};
@@ -50,6 +50,7 @@ impl LoginHandler {
                 let res = self.client.post(url).body(b).build();
                 match res {
                     Ok(request) => {
+                        debug!("{:?}", request);
                         login_response = self
                             .client
                             .execute(request)
@@ -85,14 +86,17 @@ impl LoginHandler {
             Ok(b) => {
                 let res = self.client.post(url).body(b).build();
                 match res {
-                    Ok(request) => self
+                    Ok(request) => {
+                        debug!("{:?}", request);
+                        self
                         .client
                         .execute(request)
                         .await
                         .unwrap()
                         .json::<LoginResponse>()
                         .await
-                        .unwrap(),
+                        .unwrap()
+                    },
                     Err(request) => {
                         error!("Error sending request!");
                         error!("{}", request);
