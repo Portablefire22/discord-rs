@@ -55,7 +55,7 @@ impl LoginHandler {
                 debug!("RES: {:?}", res);
                 match res {
                     Ok(request) => {
-                        debug!("{:?}", request.body());
+                        debug!("{:?}", request.body().unwrap());
                         login_response = self
                             .client
                             .execute(request)
