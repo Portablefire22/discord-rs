@@ -45,18 +45,22 @@ impl LoginHandler {
         let url = format!("https://discord.com/api/v9/auth/login");
         let login_response;
         let d = Details::new(username, password, undelete);
-        debug!("Details: {:?}", &d);
         let body = serde_json::to_string(&d);
-        debug!("{:?}", &body);
         match body {
             Ok(b) => {
-                debug!("B: {:?}", &b);
                 let res = self.client.post(url).body(b).build();
-                debug!("RES: {:?}", res);
                 match res {
                     Ok(request) => {
-                        let b = request.body().unwrap();
-                        debug!("{:?}", b.as_bytes());
+                        let x = self
+                            .client
+                            .execute(request)
+                            .await
+                            .unwrap()
+                            .text()
+                            .await
+                            .unwrap();
+                        debug!("{:?}", x);
+                        panic!("");
                         login_response = self
                             .client
                             .execute(request)
