@@ -63,7 +63,8 @@ impl LoginHandler {
                             .unwrap()
                             .json::<LoginResponse>()
                             .await
-                            .unwrap()
+                            .unwrap();
+                        debug!("Info: {:?}", login_response);
                     }
                     Err(request) => {
                         error!("Error sending request!");
