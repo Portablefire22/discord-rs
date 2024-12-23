@@ -50,7 +50,9 @@ impl LoginHandler {
         debug!("{:?}", &body);
         match body {
             Ok(b) => {
+                debug!("B: {:?}", &b);
                 let res = self.client.post(url).body(b).build();
+                debug!("RES: {:?}", res);
                 match res {
                     Ok(request) => {
                         debug!("{:?}", request);
