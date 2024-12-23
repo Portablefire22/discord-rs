@@ -44,7 +44,9 @@ impl LoginHandler {
     ) -> LoginResponse {
         let url = format!("https://discord.com/api/v9/auth/login");
         let login_response;
-        let body = serde_json::to_string(&Details::new(username, password, undelete));
+        let d = Details::new(username, password, undelete);
+        debug!("Details: {:?}", &d);
+        let body = serde_json::to_string(&d);
         match body {
             Ok(b) => {
                 let res = self.client.post(url).body(b).build();
