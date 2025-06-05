@@ -21,7 +21,7 @@ impl Details {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LoginResponse {
-    user_id: Option<String>,
+    pub user_id: Option<String>,
     pub mfa: Option<bool>,
     pub sms: Option<bool>,
     pub ticket: Option<String>,
