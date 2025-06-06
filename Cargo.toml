@@ -1,6 +1,6 @@
 [package]
 name = "discord_rs"
-version = "0.1.11"
+version = "0.1.12"
 edition = "2021"
 
 [dependencies]
@@ -13,4 +13,4 @@ log = "0.4"
 
 [dev-dependencies]
 tokio = {version = "1.37", features = ["macros"]}
-
+dotenvy = "0.15"
