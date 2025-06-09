@@ -11,6 +11,7 @@ const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
             env::var("CARGO_PKG_VERSION").unwrap_or(String::from("0.0.0")))
 });
 
+#[derive(Clone, Debug)]
 pub struct Client {
     http: reqwest::Client,
     pub(crate) token: String,
