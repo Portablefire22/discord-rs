@@ -3,7 +3,7 @@ use std::{env, sync::LazyLock};
 use log::{debug, error};
 use reqwest::header;
 
-use crate::models::login::{Details, LoginResponse, MultiFactorBody, MFA};
+use crate::models::{gateway::Shard, login::{self, details::Details, login_response::LoginResponse, mfa::{MultiFactorBody, MFA}}};
 
 pub mod channels;
 pub mod users;
@@ -20,6 +20,7 @@ const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
 pub struct Client {
     http: reqwest::Client,
     pub token: String,
+    shard: Shard,
 }
 
 impl Client {
@@ -27,21 +28,21 @@ impl Client {
     pub async fn new(token: String, user_agent: Option<String>) -> Self {
         
         let http = new_http_client(Some(token.clone()), user_agent);
-        println!("{}", DEFAULT_USER_AGENT.clone());
+        let shard = Shard::new(&http).await;
+
         Self {
             token,
-            http
+            http,
+            shard
         }
     }
 
-    pub async fn new_from_login(username: String, password: String, user_agent: Option<String>) -> Result<Self, &'static str> {
+    pub async fn new_from_login(username: String, password: String, user_agent: Option<String>) -> Result<Self, LoginResponse> {
         let http = new_http_client(None, user_agent.clone());
         let response = submit_login(http, username, password, false).await;
-        match response.token {
-            Some(token) => {
-                Ok(Self::new(token.clone(), user_agent).await)
-            }, 
-            None => Err("Could not login"),
+        match response {
+            LoginResponse::Success { user_id, token, user_settings } => Ok(Self::new(token, user_agent).await),
+            _ => Err(response),
         }
     }
 }
