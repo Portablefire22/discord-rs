@@ -12,3 +12,4 @@ pub mod roles;
 pub mod stickers;
 pub mod threads;
 pub mod users;
+pub mod gateway;

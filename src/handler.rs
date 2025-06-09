@@ -5,7 +5,7 @@ use std::{
     io::{self, Write},
 };
 
-use crate::types::{
+use crate::models::{
     channels::{self, Channel},
     guilds::{self, Guild},
     messages, post_message, users,

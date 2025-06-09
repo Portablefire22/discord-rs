@@ -3,7 +3,7 @@ use reqwest::{header, Client};
 use rpassword::prompt_password;
 use std::io::{self, prelude::*};
 
-use crate::types::login::*;
+use crate::{models::login::{Details, LoginResponse, MultiFactorBody, MFA}};
 
 #[derive(Debug)]
 pub struct LoginHandler {

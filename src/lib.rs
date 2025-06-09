@@ -1,7 +1,7 @@
 pub mod handler;
+pub mod models;
 pub mod login;
-pub mod types;
-pub mod gateway;
+pub mod client;
 
 #[cfg(test)]
 mod tests {
@@ -13,8 +13,7 @@ mod tests {
 
     #[tokio::test]
     async fn unauthorised_guild_error() {
-        dotenv().ok();
-
+        dotenv().ok(); 
         let req_handle = handler::MessageHandler::new("fds".to_string());
         let res = req_handle.get_current_user_guilds().await;
         match res {

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::gateway::opcodes::Opcode;
+use crate::models::gateway::opcodes::Opcode;
 
 
 #[derive(Serialize, Deserialize)]

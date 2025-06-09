@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::gateway::types::{connection_properties::ConnectionProperties, update_presence::UpdatePresence};
+use crate::models::gateway::types::{connection_properties::ConnectionProperties, update_presence::UpdatePresence};
 
 
 #[derive(Serialize, Deserialize)]
