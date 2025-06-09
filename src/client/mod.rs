@@ -19,7 +19,7 @@ const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
 #[derive(Clone, Debug)]
 pub struct Client {
     http: reqwest::Client,
-    pub(crate) token: String,
+    pub token: String,
 }
 
 impl Client {
@@ -39,7 +39,7 @@ impl Client {
         let response = submit_login(http, username, password, false).await;
         match response.token {
             Some(token) => {
-                Ok(Self::new(token, user_agent).await)
+                Ok(Self::new(token.clone(), user_agent).await)
             }, 
             None => Err("Could not login"),
         }
