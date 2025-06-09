@@ -5,8 +5,9 @@ use super::{
 };
 
 #[derive(Serialize, Deserialize, Debug, Default, PartialEq, Eq, Clone)]
+#[serde_with::skip_serializing_none]
 pub struct Message {
-    pub id: String,
+    pub id: Option<String>,
     pub channel_id: String,
     pub author: Option<users::User>,
     pub content: Option<String>, // None if lacking permissions

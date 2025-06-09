@@ -5,9 +5,14 @@ use reqwest::header;
 
 use crate::models::login::{Details, LoginResponse, MultiFactorBody, MFA};
 
+pub mod channels;
+pub mod users;
+pub mod guilds;
 
 const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
-    format!("Mozilla/5.0 (X11; Linux risc-v) Gecko/20100101 Kitten-rs/{}",
+    format!("Mozilla/5.0 (X11; {} {}) Gecko/20100101 Kitten-rs/{}",
+            std::env::consts::OS,
+            std::env::consts::ARCH,
             env::var("CARGO_PKG_VERSION").unwrap_or(String::from("0.0.0")))
 });
 
@@ -22,7 +27,7 @@ impl Client {
     pub async fn new(token: String, user_agent: Option<String>) -> Self {
         
         let http = new_http_client(Some(token.clone()), user_agent);
-
+        println!("{}", DEFAULT_USER_AGENT.clone());
         Self {
             token,
             http
