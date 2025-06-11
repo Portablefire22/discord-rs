@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Deserialize, Serialize)]
+#[derive(Copy, Clone)]
 pub enum Opcode {
     Dispatch,
     Heartbeat,
@@ -39,5 +39,22 @@ impl From<usize> for Opcode {
             37 => Self::SubscribeGuild,
             _ => Self::UnknownOperation,
         }
+    }
+}
+
+impl Serialize for Opcode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: serde::Serializer {
+        serializer.serialize_u64(*self as u64)
+    }
+}
+
+impl<'de> Deserialize<'de> for Opcode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: serde::Deserializer<'de> {
+        let u = usize::deserialize(deserializer)?;
+        Ok(Opcode::from(u))
     }
 }

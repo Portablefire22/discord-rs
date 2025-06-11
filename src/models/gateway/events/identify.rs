@@ -9,9 +9,13 @@ const LIB_NAME: &'static str = "Kitten-rs";
 pub struct Identify {
     token: String,
     properties: ConnectionProperties,
+    #[serde(skip_serializing_if = "Option::is_none")]
     compress: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     large_threshold: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     shard: Option<Vec<usize>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     presence: Option<UpdatePresence>,
     intents: usize,
 }

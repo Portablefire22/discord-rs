@@ -1,5 +1,6 @@
-use std::{env, sync::LazyLock};
+use std::{env, sync::{Arc, LazyLock}};
 
+use futures_util::lock::Mutex;
 use log::{debug, error};
 use reqwest::header;
 
@@ -20,7 +21,7 @@ const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
 pub struct Client {
     http: reqwest::Client,
     pub token: String,
-    shard: Shard,
+    shard: Arc<Mutex<Shard>>,
 }
 
 impl Client {

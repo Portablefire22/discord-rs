@@ -1,21 +1,26 @@
-use serde::Serialize;
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-use crate::models::gateway::opcodes::Opcode;
+use crate::models::gateway::{events::EventData, opcodes::Opcode};
 
 
-#[derive(Serialize)]
-pub struct WebsocketMessage<S: Serialize> {
+#[derive(Serialize, Deserialize)]
+#[serde_with::skip_serializing_none]
+pub struct WebsocketMessage {
     #[serde(rename = "op")]
-    operation: Opcode,
+    pub operation: Opcode,
     #[serde(rename = "d")]
-    data: Option<S>,
+    pub data: Option<EventData>,
+    t: Option<usize>,
+    s: Option<usize>,
 }
 
-impl<S: Serialize> WebsocketMessage<S> {
-    pub fn new(operation: Opcode, data: Option<S>) -> Self {
+impl WebsocketMessage {
+    pub fn new(operation: Opcode, data: Option<EventData>) -> Self {
         Self {
             operation,
-            data
+            data,
+            t: None,
+            s: None
         }
     }
 }
