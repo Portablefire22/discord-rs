@@ -1,7 +1,6 @@
 use std::env;
 use dotenvy::dotenv;
 
-use crate::models::messages::Message;
 
 fn token() -> String {
     dotenv().ok();

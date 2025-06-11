@@ -3,7 +3,7 @@ use std::{env, sync::LazyLock};
 use dotenvy::dotenv;
 use reqwest::header;
 
-use crate::{client::Client, gateway::Shard};
+use crate::gateway::Shard;
 
 const DEFAULT_USER_AGENT: LazyLock<String> = LazyLock::new(|| {
     format!("Mozilla/5.0 (X11; {} {}) Gecko/20100101 Kitten-rs/{}",
