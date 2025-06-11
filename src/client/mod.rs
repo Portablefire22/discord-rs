@@ -3,8 +3,8 @@ use std::{env, sync::LazyLock};
 use log::{debug, error};
 use reqwest::header;
 
-use crate::models::{gateway::Shard, login::{self, details::Details, login_response::LoginResponse, mfa::{MultiFactorBody, MFA}}};
-
+use crate::models::{ login::{details::Details, login_response::LoginResponse, mfa::{MultiFactorBody, MFA}}};
+use crate::gateway::Shard;
 pub mod channels;
 pub mod users;
 pub mod guilds;
@@ -28,7 +28,7 @@ impl Client {
     pub async fn new(token: String, user_agent: Option<String>) -> Self {
         
         let http = new_http_client(Some(token.clone()), user_agent);
-        let shard = Shard::new(&http).await;
+        let shard = Shard::new(&http, token.clone()).await.expect("Could not create websocket connection");
 
         Self {
             token,

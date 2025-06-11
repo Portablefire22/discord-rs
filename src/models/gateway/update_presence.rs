@@ -1,8 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-use crate::models::messages::MessageActivity;
-
-
 #[derive(Serialize, Deserialize)]
 pub struct UpdatePresence {
     since: Option<usize>,
