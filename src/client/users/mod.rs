@@ -1,5 +1,5 @@
 use log::error;
-use crate::models::{channels::Channel, guilds::Guild, users::User};
+use crate::models::{guilds::Guild, users::User};
 
 use super::Client;
 

@@ -2,14 +2,14 @@
 mod tests;
 
 
-use std::{sync::Arc, thread::sleep, time::{Duration, Instant}};
+use std::{sync::Arc, time::Duration};
 
 use futures_util::{lock::Mutex, SinkExt, StreamExt};
 use serde::Deserialize;
 use tokio::net::TcpStream;
 use tokio_tungstenite::{connect_async, tungstenite::{self, Message}, MaybeTlsStream, WebSocketStream};
 
-use crate::models::gateway::{events::{hello::Hello, identify::Identify, EventData}, opcodes::Opcode, websocket_message::WebsocketMessage};
+use crate::models::gateway::{events::{identify::Identify, EventData}, opcodes::Opcode, websocket_message::WebsocketMessage};
 
 #[derive(Debug, Clone)]
 pub struct Shard {
